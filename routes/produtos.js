@@ -16,8 +16,15 @@ router.get('/:id_produto', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+
+    const produto = {
+        nome: req.body.nome,
+        preco: req.body.preco
+    };
+
     res.status(201).send({
-        Mensagem: 'Usando post dentro da rota de produtos'
+        Mensagem: 'Usando post dentro da rota de produtos',
+        produto_criado: produto
     });
 });
 

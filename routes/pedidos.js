@@ -16,8 +16,16 @@ router.get('/:id_pedido', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+
+    const pedido_criado = {
+        nome: req.body.nome,
+        id_produto: req.body.id_produto,
+        quantidade: req.body.quantidade
+    };
+
     res.status(201).send({
-        Mensagem: 'Usando post dentro da rota de pedidos'
+        Mensagem: 'Usando post dentro da rota de pedidos',
+        pedido_Criado: pedido_criado
     });
 });
 
