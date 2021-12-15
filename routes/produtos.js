@@ -1,7 +1,11 @@
 const express = require('express')
 const router = express.Router();
+const mysql = require('../mysql').pool;
 
 router.get('/', (req, res, next) => {
+
+    
+
     res.status(200).send({
         Mensagem: 'Usando o get dentro da rota de produtos'
     });
@@ -17,14 +21,26 @@ router.get('/:id_produto', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
 
-    const produto = {
-        nome: req.body.nome,
-        preco: req.body.preco
-    };
+    mysql.getConnection((error, conn) => {
+        conn.query(
+            'INSERT INTO produtos (nome, preco) VALUES (?,?)',
+            [req.body.nome, req.body.preco],
+            (error, resultado, field) => {
+                conn.release();
 
-    res.status(201).send({
-        Mensagem: 'Usando post dentro da rota de produtos',
-        produto_criado: produto
+                if (error) {
+                    res.status(500).send({
+                        error: error,
+                        response: null
+                    });
+                }
+
+                res.status(201).send({
+                    Mensagem: '201 - Produto inserido com sucesso.',
+                    id_produto: resultado.insertId
+                });
+            }
+        )
     });
 });
 
